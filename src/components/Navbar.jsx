@@ -41,9 +41,9 @@ export default function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar__inner">
-        <Link to="/" className="navbar__logo" aria-label="Swiggy clone home">
-          <span className="navbar__logo-mark">swiggy</span>
-          <span className="navbar__logo-tag">clone</span>
+        <Link to="/" className="navbar__logo" aria-label="Foodie Hub home">
+          <span className="navbar__logo-mark">foodie</span>
+          <span className="navbar__logo-tag">hub</span>
         </Link>
 
         <button type="button" className="navbar__location" title="Delivery location (demo)">
