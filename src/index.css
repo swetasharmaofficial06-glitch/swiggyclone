@@ -1,26 +1,38 @@
 /* ============================================================
-   Swiggy-clone design system
-   Primary: #fc8019 (Swiggy orange)
+   Foodie Hub design system — dark theme
+   Primary: #ff8f3c (warm orange)
    ============================================================ */
 
 :root {
-  --primary: #fc8019;
-  --primary-dark: #e46e0a;
-  --primary-soft: #fff3e8;
-  --green: #60b246;
-  --green-dark: #2b7a0b;
-  --green-soft: #f0f7eb;
-  --red: #e23744;
-  --purple: #6c5ce7;
-  --text: #1c1c1c;
-  --muted: #686b78;
-  --border: #e9e9eb;
-  --bg: #ffffff;
-  --bg-soft: #f7f7f7;
+  color-scheme: dark;
+
+  --primary: #ff8f3c;
+  --primary-dark: #f4740f;      /* filled hover backgrounds */
+  --primary-text: #ffb37a;      /* orange text on dark surfaces */
+  --primary-soft: #3a2414;
+  --green: #3fae4a;
+  --green-strong: #2f9e44;      /* filled green backgrounds */
+  --green-dark: #8fe07a;        /* green text on dark */
+  --green-soft: #1c2f1a;
+  --green-border: #2d4a26;
+  --red: #ff6b78;
+  --danger-soft: #3a1c20;
+  --danger-soft-hover: #4a2329;
+  --danger-text: #ff9aa3;
+  --purple: #b3a8ff;
+  --purple-soft: #24243c;
+  --text: #f2f4f8;
+  --muted: #a2a9b8;
+  --border: #2b303b;
+  --border-hover: #3a4150;
+  --bg: #0e1014;
+  --bg-soft: #1e232d;
+  --surface: #171a21;
+  --surface-2: #262c38;
   --radius: 16px;
   --radius-sm: 10px;
-  --shadow: 0 8px 28px rgba(28, 28, 28, 0.09);
-  --shadow-hover: 0 14px 38px rgba(28, 28, 28, 0.14);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 14px 38px rgba(0, 0, 0, 0.6);
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -30,6 +42,7 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--bg);
 }
 
 body {
@@ -110,7 +123,7 @@ input, select, textarea {
 }
 
 .btn--outline {
-  background: #fff;
+  background: var(--surface);
   color: var(--text);
   border: 1px solid var(--border);
 }
@@ -130,12 +143,12 @@ input, select, textarea {
 }
 
 .btn--danger {
-  background: #fdecec;
+  background: var(--danger-soft);
   color: var(--red);
 }
 
 .btn--danger:hover {
-  background: #fbdada;
+  background: var(--danger-soft-hover);
 }
 
 .btn--block {
@@ -154,7 +167,7 @@ input, select, textarea {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: #fff;
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
 
@@ -245,7 +258,7 @@ input, select, textarea {
   display: flex;
   align-items: center;
   gap: 7px;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 8px 14px;
@@ -299,7 +312,7 @@ input, select, textarea {
   background: var(--primary-soft);
   font-size: 11px;
   font-weight: 800;
-  color: var(--primary-dark);
+  color: var(--primary-text);
   letter-spacing: 0.3px;
 }
 
@@ -313,7 +326,7 @@ input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 8px 14px;
@@ -346,7 +359,7 @@ input, select, textarea {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 4px 10px 4px 4px;
@@ -379,7 +392,7 @@ input, select, textarea {
   right: 0;
   z-index: 60;
   width: 246px;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: var(--shadow);
@@ -420,7 +433,7 @@ input, select, textarea {
 }
 
 .navbar__menu-item:hover {
-  background: #fdecec;
+  background: var(--danger-soft);
 }
 
 .auth-toast {
@@ -433,7 +446,7 @@ input, select, textarea {
   align-items: center;
   gap: 12px;
   max-width: min(92vw, 430px);
-  background: #2b2b2b;
+  background: var(--surface-2);
   color: #fff;
   font-size: 13px;
   line-height: 1.45;
@@ -491,7 +504,7 @@ input, select, textarea {
   align-items: center;
   gap: 10px;
   background: var(--green-soft);
-  border: 1px solid #d6e8c8;
+  border: 1px solid var(--green-border);
   border-radius: var(--radius-sm);
   padding: 10px 12px;
   margin-bottom: 4px;
@@ -523,7 +536,7 @@ input, select, textarea {
   text-transform: uppercase;
   letter-spacing: 0.6px;
   color: var(--green-dark);
-  background: #fff;
+  background: var(--surface);
   border-radius: 999px;
   padding: 3px 8px;
 }
@@ -545,7 +558,7 @@ input, select, textarea {
   gap: 12px;
   max-width: 480px;
   margin: 44px auto;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -674,7 +687,7 @@ input, select, textarea {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px 18px;
@@ -682,7 +695,7 @@ input, select, textarea {
 }
 
 .order-card:hover {
-  border-color: #dcdce0;
+  border-color: var(--border-hover);
   box-shadow: var(--shadow);
 }
 
@@ -758,12 +771,12 @@ input, select, textarea {
 
 .order-status--placed {
   background: var(--primary-soft);
-  color: var(--primary-dark);
+  color: var(--primary-text);
 }
 
 .order-status--accepted,
 .order-status--outForDelivery {
-  background: #eef0ff;
+  background: var(--purple-soft);
   color: var(--purple);
 }
 
@@ -773,8 +786,8 @@ input, select, textarea {
 }
 
 .order-status--cancelled {
-  background: #fdecec;
-  color: #a3221f;
+  background: var(--danger-soft);
+  color: var(--danger-text);
 }
 
 /* ============ Hero ============ */
@@ -830,7 +843,7 @@ input, select, textarea {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #fff;
+  background: var(--surface);
   border-radius: 12px;
   padding: 6px 8px 6px 16px;
   box-shadow: 0 10px 30px rgba(120, 50, 0, 0.18);
@@ -960,7 +973,7 @@ input, select, textarea {
 }
 
 .filter-chip {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 8px 15px;
@@ -977,7 +990,7 @@ input, select, textarea {
 .filter-chip--active {
   background: var(--primary-soft);
   border-color: var(--primary);
-  color: var(--primary-dark);
+  color: var(--primary-text);
 }
 
 .filter-row__count {
@@ -991,7 +1004,7 @@ input, select, textarea {
   border-radius: var(--radius-sm);
   padding: 9px 12px;
   font-size: 13.5px;
-  background: #fff;
+  background: var(--surface);
   color: var(--text);
   cursor: pointer;
 }
@@ -1007,7 +1020,7 @@ input, select, textarea {
 .restaurant-card {
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid transparent;
   border-radius: var(--radius);
   overflow: hidden;
@@ -1066,7 +1079,7 @@ input, select, textarea {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(15, 17, 22, 0.88);
   color: var(--green-dark);
   font-size: 11px;
   font-weight: 700;
@@ -1166,7 +1179,7 @@ input, select, textarea {
 .restaurant-hero__info {
   position: relative;
   margin-top: -54px;
-  background: #fff;
+  background: var(--surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 24px 26px;
@@ -1212,7 +1225,7 @@ input, select, textarea {
   margin-top: 14px;
   display: inline-block;
   background: var(--primary-soft);
-  color: var(--primary-dark);
+  color: var(--primary-text);
   border: 1px dashed var(--primary);
   border-radius: var(--radius-sm);
   padding: 10px 14px;
@@ -1314,7 +1327,7 @@ input, select, textarea {
   font-size: 11px;
   font-weight: 700;
   color: var(--red);
-  background: #fdecec;
+  background: var(--danger-soft);
   border-radius: 4px;
   padding: 2px 7px;
 }
@@ -1339,7 +1352,7 @@ input, select, textarea {
   left: 50%;
   bottom: -12px;
   transform: translateX(-50%);
-  background: #fff;
+  background: var(--surface);
   color: var(--green-dark);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -1358,7 +1371,7 @@ input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
   overflow: hidden;
@@ -1416,7 +1429,7 @@ input, select, textarea {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--green-dark);
+  background: var(--green-strong);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -1456,7 +1469,7 @@ input, select, textarea {
   right: 0;
   bottom: 0;
   width: min(430px, 94vw);
-  background: #fff;
+  background: var(--surface);
   z-index: 70;
   display: flex;
   flex-direction: column;
@@ -1537,7 +1550,7 @@ input, select, textarea {
 .cart-drawer__item .qty-controls {
   background: var(--primary-soft);
   border-color: transparent;
-  color: var(--primary-dark);
+  color: var(--primary-text);
 }
 
 .cart-drawer__empty {
@@ -1566,7 +1579,7 @@ input, select, textarea {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .free-delivery-nudge {
@@ -1597,7 +1610,7 @@ input, select, textarea {
 .bill-row--total {
   margin-top: 8px;
   padding-top: 10px;
-  border-top: 1px dashed #d8d8dc;
+  border-top: 1px dashed var(--border);
   color: var(--text);
   font-size: 15px;
   font-weight: 700;
@@ -1685,7 +1698,7 @@ input, select, textarea {
   padding: 10px 12px;
   font-size: 14px;
   outline: none;
-  background: #fff;
+  background: var(--surface);
   transition: border-color 0.15s ease;
 }
 
@@ -1719,8 +1732,8 @@ input, select, textarea {
 }
 
 .form-msg--error {
-  color: #a3221f;
-  background: #fdecec;
+  color: var(--danger-text);
+  background: var(--danger-soft);
   border-radius: var(--radius-sm);
   padding: 10px 14px;
 }
@@ -1854,7 +1867,7 @@ input, select, textarea {
 
 .admin-page__seed-status {
   background: var(--primary-soft);
-  color: var(--primary-dark);
+  color: var(--primary-text);
   border-radius: var(--radius-sm);
   padding: 10px 14px;
   font-size: 13.5px;
@@ -1870,7 +1883,7 @@ input, select, textarea {
 }
 
 .admin-section {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 22px;
@@ -2009,7 +2022,7 @@ input, select, textarea {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #ffe8d6, #fff3e8);
+  background: linear-gradient(135deg, #1c2029, #242a35);
   font-size: 34px;
 }
 
