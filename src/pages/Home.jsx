@@ -63,14 +63,11 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="hero__inner">
-          <p className="hero__eyebrow">🍔 Swiggy it!</p>
-          <h1>
-            Order food &amp; groceries.
-            <br />
-            Discover best restaurants.
-          </h1>
+          <p className="hero__eyebrow">🍔 Welcome to</p>
+          <h1>Foodie Hub</h1>
           <p className="hero__subtitle">
-            Fresh food from your favourite places, delivered fast — right at your doorstep.
+            Order food &amp; groceries from your favourite restaurants — delivered fast, right at
+            your doorstep.
           </p>
 
           <SearchBar
