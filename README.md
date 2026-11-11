@@ -17,7 +17,12 @@ Stack: **React 19 + Vite + React Router + Firebase (Auth + Firestore + Hosting)*
 - 🧾 **Checkout (login required)** — signed out pe Google sign-in card, signed in pe naam
   prefilled + email; Swiggy-style bill breakdown (Item Total + Delivery Fee + Platform Fee +
   GST), order Firestore `orders` mein `userId` ke saath save
-- 📦 **My Orders** (`/orders`) — account menu se khulta hai, realtime order list with status
+- 📦 **My Orders + live tracking** (`/orders`) — account menu se khulta hai, realtime order list
+  aur 4-step timeline (Placed → Accepted → Out for delivery → Delivered), cancelled ka alag card
+- 🎟️ **Coupons** — checkout par 3 codes: `WELCOME50` (50% up to ₹100, min ₹199), `FREEDEL`
+  (free delivery, min ₹299), `FLAT50` (₹50 off, min ₹399); bill mein discount line + order par saved amount
+- 📍 **Saved addresses** (`/addresses`) — max 5 addresses (Home/Work/Other), ek default, checkout par
+  one-click select ya naya address save
 - 🔥 **Most Sold Items** — Home page par offers ke neeche bestseller dishes; admin menu item ko
   ⭐ bestseller mark kare (optional sold count ke saath), section sold count se sorted top 10 dikhata hai
 - 🌗 **Light/dark toggle** — navbar ke ☀️/🌙 button se theme switch, choice `localStorage` mein
@@ -27,7 +32,8 @@ Stack: **React 19 + Vite + React Router + Firebase (Auth + Firestore + Hosting)*
 - 🚴 **Free delivery nudge** — ₹499 se upar delivery free
 - 🛍️ **Sticky "View Cart" bar** — Swiggy jaisa
 - 👩‍🍳 **Admin panel** (`/admin`) — restaurant + menu add/delete, **image picker** (bundled
-  images se choose karo ya apna URL/path daalo) with live preview
+  images se choose karo ya apna URL/path daalo) with live preview, aur **orders manager** —
+  har order ka status dropdown se badlo (customer timeline turant update hoti hai)
 - 🌱 **Sample data loader** — ek click mein 16 demo restaurants + menus
 - 🎨 Swiggy-style UI — orange theme, offer cards, green rating badges, responsive layout
 - 🧱 Good practices — services layer, custom hooks, route-level code splitting, error
@@ -178,14 +184,40 @@ zaroorat nahi). Output mein uid + claims dikhte hain.
 - **Revoke:** `npm run admin:grant -- email@example.com --revoke`
 - **Rules:** `restaurants` aur `menu` ki writes sirf `isAdmin()` ke liye; reads public.
 
-## 📦 My Orders
+## 📦 My Orders + live tracking
 
 - Navbar → avatar → **📦 My orders** (`/orders`)
 - Order ke success screen se bhi "View my orders" milta hai
 - Query: `orders` jahan `userId == apna uid`, newest first (client-side sort — koi composite
   index nahi chahiye)
-- Realtime `onSnapshot` — status change hote hi update ho jata hai (statuses: `placed`,
-  `accepted`, `outForDelivery`, `delivered`, `cancelled`)
+- Realtime `onSnapshot` — admin status badalte hi timeline turant update ho jati hai
+- Timeline: `placed` → `accepted` → `outForDelivery` → `delivered`; har step ke saath time.
+  `cancelled` hone par alag red card
+- Coupon se save kiya amount card par dikhta hai (`🎟️ WELCOME50 · Saved ₹100`)
+
+## 🎟️ Coupons
+
+Codes `src/constants.js` ke `COUPONS` object mein fixed hain (admin-managed nahi):
+
+| Code | Discount | Min order |
+|------|----------|-----------|
+| `WELCOME50` | 50% off, max ₹100 | ₹199 |
+| `FREEDEL` | Delivery free | ₹299 |
+| `FLAT50` | ₹50 off | ₹399 |
+
+- Checkout par code type karo ya ek-click chip dabao; **Remove** se hatao
+- Min order se kam cart hone par apply nahi hota (error message dikhta hai)
+- Logic `src/utils/coupon.js` mein — `couponForCart()` discount/free-delivery return karta hai
+- Order par `discount` + `couponCode` save hote hain, My Orders mein dikhte hain
+
+## 📍 Saved Addresses
+
+- Navbar → avatar → **📍 Saved addresses** (`/addresses`) — ya checkout se save karo
+- Data path: `users/{uid}/addresses/{addressId}` — sirf owner padh/likh sakta hai
+- Max **5** addresses; label Home/Work/Other; ek address **default** ho sakta hai
+- Checkout par saved addresses list se one-click select (phone + address auto-fill)
+- Checkout par "Ye address future ke liye save karo" checkbox bhi hai
+- Code: `src/services/addressService.js`, `src/hooks/useAddresses.js`, `src/pages/AddressesPage.jsx`
 
 ## 🖼️ Images kahan se aati hain
 
@@ -212,7 +244,10 @@ ya Storage setup nahi chahiye:
   `localhost`, `webufire.web.app`, `webufire.firebaseapp.com`.
 - **Orders:** `create` sirf signed-in user ke liye — `request.resource.data.userId` uske
   `request.auth.uid` se match karta hai, aur `customer.email` token ke email se. Read apne
-  orders (ya admin ko sab); update/delete client se band.
+  orders (ya admin ko sab). **Update sirf admin** — aur sirf `status` + `statusHistory` fields
+  (valid status list se), delete client se band.
+- **Addresses:** `users/{uid}/addresses` — read/write/delete sirf owner; `create` par
+  `label`, `address` (≥10 chars), `phone`, `isDefault` validate hote hain.
 - **Restaurants/menu:** read public, **write sirf admin** (`admin == true` custom claim).
 - **Admin panel:** Google login + admin claim ke bina kuch bhi add/delete nahi hota — UI gate
   aur Firestore rules, dono level pe.
@@ -223,7 +258,6 @@ ya Storage setup nahi chahiye:
 
 ## 🧭 Aage kya add kar sakti ho
 
-- 🚚 Admin orders screen + status update (`placed` → `accepted` → `delivered`)
 - 📝 Restaurant/menu edit functionality
 - 🗺️ Location-based restaurant filtering
 - 🎨 Tailwind/shadcn se aur polish

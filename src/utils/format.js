@@ -20,16 +20,22 @@ export function parseDeliveryMinutes(value) {
   return match ? Number(match[0]) : Number.MAX_SAFE_INTEGER
 }
 
-/** Cart + fees ka final bill */
-export function calculateBill(itemsTotal, { delivery, platform, gstRate, freeDeliveryAbove }) {
-  const deliveryFee = itemsTotal >= freeDeliveryAbove ? 0 : delivery
+/** Cart + fees ka final bill (coupon discount / free delivery optional). */
+export function calculateBill(
+  itemsTotal,
+  { delivery, platform, gstRate, freeDeliveryAbove, discount = 0, freeDelivery = false },
+) {
+  const deliveryFee = freeDelivery || itemsTotal >= freeDeliveryAbove ? 0 : delivery
   const platformFee = platform
   const gst = Math.round(itemsTotal * gstRate)
+  const gross = itemsTotal + deliveryFee + platformFee + gst
+  const safeDiscount = Math.min(Math.max(0, Math.round(discount)), gross)
   return {
     itemsTotal,
     deliveryFee,
     platformFee,
     gst,
-    total: itemsTotal + deliveryFee + platformFee + gst,
+    discount: safeDiscount,
+    total: gross - safeDiscount,
   }
 }

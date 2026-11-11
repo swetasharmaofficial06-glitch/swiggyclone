@@ -50,3 +50,6 @@ pnpm-debug.log*
 Thumbs.db
 *.sw?
 *.sublime-workspace
+
+# ---- Playwright CLI session artifacts ----
+.playwright-cli/

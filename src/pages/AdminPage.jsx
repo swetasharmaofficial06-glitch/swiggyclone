@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import useRestaurants from '../hooks/useRestaurants'
 import useMenuItems from '../hooks/useMenuItems'
+import useAllOrders from '../hooks/useAllOrders'
 import RestaurantForm from '../components/RestaurantForm'
 import MenuItemForm from '../components/MenuItemForm'
 import Loader from '../components/Loader'
 import GoogleIcon from '../components/GoogleIcon'
 import { createRestaurant, deleteRestaurant } from '../services/restaurantService'
 import { addMenuItem, deleteMenuItem, getMenuItems, updateMenuItem } from '../services/menuService'
+import { ORDER_STATUS, ORDER_STATUS_OPTIONS, updateOrderStatus } from '../services/orderService'
 import { authErrorMessage, changePassword } from '../services/authService'
+import { formatPrice } from '../utils/format'
 import { SAMPLE_RESTAURANTS } from '../data/sampleData'
 
 export default function AdminPage() {
@@ -253,6 +256,15 @@ export default function AdminPage() {
           {seedStatus ? <p className="admin-page__seed-status">{seedStatus}</p> : null}
 
           <div className="admin-layout">
+            <section className="admin-section admin-section--wide">
+              <h2>📦 Orders</h2>
+              <p className="admin-section__note">
+                Status badalte hi customer ke <strong>My Orders</strong> timeline mein turant update
+                ho jayega (realtime).
+              </p>
+              <OrdersManager />
+            </section>
+
             <section className="admin-section">
               <h2>+ Naya restaurant</h2>
               <RestaurantForm />
@@ -296,7 +308,7 @@ export default function AdminPage() {
               )}
             </section>
 
-            <section className="admin-section">
+            <section className="admin-section admin-section--wide">
               <h2>📋 All restaurants ({restaurants.length})</h2>
               {loading ? (
                 <Loader />
@@ -443,5 +455,95 @@ function MenuManager({ restaurantId, restaurantName }) {
         </li>
       ))}
     </ul>
+  )
+}
+
+const orderDateFormatter = new Intl.DateTimeFormat('en-IN', {
+  day: 'numeric',
+  month: 'short',
+  hour: 'numeric',
+  minute: '2-digit',
+})
+
+function formatOrderDate(timestamp) {
+  if (!timestamp?.toDate) return 'Just now'
+  try {
+    return orderDateFormatter.format(timestamp.toDate())
+  } catch {
+    return 'Just now'
+  }
+}
+
+/** Admin: saare orders + status dropdown (realtime). */
+function OrdersManager() {
+  const { orders, loading, error } = useAllOrders(true)
+  const [busyId, setBusyId] = useState(null)
+  const [message, setMessage] = useState(null)
+
+  async function handleStatus(order, status) {
+    if (status === order.status) return
+    setBusyId(order.id)
+    setMessage(null)
+    try {
+      await updateOrderStatus(order.id, status)
+      setMessage(
+        `#${order.id.slice(0, 8).toUpperCase()} → ${ORDER_STATUS[status]?.label ?? status}`,
+      )
+    } catch (err) {
+      setMessage(`Status update nahi hua: ${err.message}`)
+    } finally {
+      setBusyId(null)
+    }
+  }
+
+  if (loading) return <Loader label="Orders load ho rahe hain…" />
+  if (error) {
+    return <p className="admin-section__note">Orders load nahi hue: {error.message}</p>
+  }
+  if (orders.length === 0) {
+    return <p className="admin-section__note">Abhi tak koi order nahi aaya.</p>
+  }
+
+  return (
+    <>
+      {message ? <p className="form-msg form-msg--success">{message}</p> : null}
+
+      <ul className="admin-orders">
+        {orders.slice(0, 20).map((order) => (
+          <li key={order.id} className="admin-order-row">
+            <div className="admin-order-row__info">
+              <strong>
+                #{order.id.slice(0, 8).toUpperCase()} · {order.restaurantName}
+              </strong>
+              <span>
+                {' '}· {order.customer?.name || 'Customer'} · {order.itemCount ?? order.items?.length ?? 0} item
+                {(order.itemCount ?? order.items?.length ?? 0) === 1 ? '' : 's'}
+              </span>
+              <p className="admin-order-row__address">
+                📍 {order.customer?.address || '—'} · ☎ {order.customer?.phone || '—'}
+              </p>
+              <p className="admin-order-row__time">{formatOrderDate(order.createdAt)}</p>
+            </div>
+
+            <div className="admin-order-row__actions">
+              <strong className="admin-order-row__total">{formatPrice(order.total)}</strong>
+              <select
+                className={`admin-order-status admin-order-status--${order.status}`}
+                value={order.status}
+                onChange={(event) => handleStatus(order, event.target.value)}
+                disabled={busyId === order.id}
+                aria-label={`Status for order ${order.id.slice(0, 8)}`}
+              >
+                {ORDER_STATUS_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.emoji} {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }
