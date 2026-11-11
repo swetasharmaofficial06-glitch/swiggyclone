@@ -10,6 +10,8 @@ const EMPTY = {
   description: '',
   isVeg: true,
   isAvailable: true,
+  isBestseller: false,
+  soldCount: '',
   imageUrl: '',
 }
 
@@ -47,6 +49,8 @@ export default function MenuItemForm({ restaurantId, restaurantName }) {
         description: form.description.trim(),
         isVeg: form.isVeg,
         isAvailable: form.isAvailable,
+        isBestseller: form.isBestseller,
+        soldCount: form.soldCount === '' ? 0 : Number(form.soldCount),
         imageUrl: form.imageUrl || '',
       })
       setForm(EMPTY)
@@ -94,6 +98,17 @@ export default function MenuItemForm({ restaurantId, restaurantName }) {
             placeholder="Biryani"
           />
         </div>
+        <div className="form-field form-field--small">
+          <label htmlFor="menu-sold-count">Sold count (optional)</label>
+          <input
+            id="menu-sold-count"
+            type="number"
+            min="0"
+            value={form.soldCount}
+            onChange={(event) => update('soldCount', event.target.value)}
+            placeholder="e.g. 1250"
+          />
+        </div>
         <div className="form-field form-field--wide">
           <label htmlFor="menu-description">Description</label>
           <input
@@ -119,6 +134,14 @@ export default function MenuItemForm({ restaurantId, restaurantName }) {
               onChange={(event) => update('isAvailable', event.target.checked)}
             />
             Available hai
+          </label>
+          <label className="form-checkbox">
+            <input
+              type="checkbox"
+              checked={form.isBestseller}
+              onChange={(event) => update('isBestseller', event.target.checked)}
+            />
+            ⭐ Bestseller (Home pe dikhega)
           </label>
         </div>
       </div>

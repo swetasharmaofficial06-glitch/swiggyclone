@@ -8,7 +8,7 @@ import MenuItemForm from '../components/MenuItemForm'
 import Loader from '../components/Loader'
 import GoogleIcon from '../components/GoogleIcon'
 import { createRestaurant, deleteRestaurant } from '../services/restaurantService'
-import { addMenuItem, deleteMenuItem, getMenuItems } from '../services/menuService'
+import { addMenuItem, deleteMenuItem, getMenuItems, updateMenuItem } from '../services/menuService'
 import { authErrorMessage, changePassword } from '../services/authService'
 import { SAMPLE_RESTAURANTS } from '../data/sampleData'
 
@@ -386,6 +386,18 @@ export default function AdminPage() {
 
 function MenuManager({ restaurantId, restaurantName }) {
   const { items, loading } = useMenuItems(restaurantId)
+  const [busyId, setBusyId] = useState(null)
+
+  async function toggleBestseller(item) {
+    setBusyId(item.id)
+    try {
+      await updateMenuItem(restaurantId, item.id, { isBestseller: !item.isBestseller })
+    } catch (err) {
+      window.alert(`Bestseller update nahi hua: ${err.message}`)
+    } finally {
+      setBusyId(null)
+    }
+  }
 
   if (loading) return <Loader label="Menu load ho raha hai…" />
   if (items.length === 0) {
@@ -397,22 +409,37 @@ function MenuManager({ restaurantId, restaurantName }) {
       {items.map((item) => (
         <li key={item.id} className="admin-menu-row">
           <div>
-            <strong>{item.name}</strong>
+            <strong>
+              {item.isBestseller ? '⭐ ' : ''}
+              {item.name}
+            </strong>
             <span>
               {' '}· ₹{item.price} · {item.category} · {item.isVeg ? '🌱 veg' : '🍗 non-veg'}
+              {Number(item.soldCount || 0) > 0 ? ` · 🔥 ${item.soldCount} sold` : ''}
             </span>
           </div>
-          <button
-            type="button"
-            className="btn btn--danger btn--small"
-            onClick={() => {
-              if (window.confirm(`"${item.name}" delete karna hai?`)) {
-                deleteMenuItem(restaurantId, item.id)
-              }
-            }}
-          >
-            Delete
-          </button>
+          <div className="admin-menu-row__actions">
+            <button
+              type="button"
+              className={`btn btn--small ${item.isBestseller ? 'btn--primary' : 'btn--outline'}`}
+              onClick={() => toggleBestseller(item)}
+              disabled={busyId === item.id}
+              title="Home page ke 'Most Sold Items' section mein dikhao"
+            >
+              {busyId === item.id ? 'Saving…' : item.isBestseller ? '★ Bestseller' : '☆ Bestseller'}
+            </button>
+            <button
+              type="button"
+              className="btn btn--danger btn--small"
+              onClick={() => {
+                if (window.confirm(`"${item.name}" delete karna hai?`)) {
+                  deleteMenuItem(restaurantId, item.id)
+                }
+              }}
+            >
+              Delete
+            </button>
+          </div>
         </li>
       ))}
     </ul>

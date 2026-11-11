@@ -1,14 +1,19 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useRestaurants } from '../hooks/useRestaurants'
+import { useBestsellers } from '../hooks/useBestsellers'
 import SearchBar from '../components/SearchBar'
 import RestaurantCard from '../components/RestaurantCard'
+import SmartImage from '../components/SmartImage'
+import { VegBadge } from '../components/MenuItemCard'
 import Loader from '../components/Loader'
 import EmptyState from '../components/EmptyState'
 import { SORT_OPTIONS } from '../constants'
-import { cx, parseDeliveryMinutes } from '../utils/format'
+import { cx, formatPrice, formatSoldCount, parseDeliveryMinutes } from '../utils/format'
 
 export default function Home() {
   const { restaurants, loading, error } = useRestaurants()
+  const { items: bestsellers } = useBestsellers()
   const [query, setQuery] = useState('')
   const [cuisine, setCuisine] = useState('All')
   const [sort, setSort] = useState('relevance')
@@ -16,6 +21,12 @@ export default function Home() {
   const [ratedOnly, setRatedOnly] = useState(false)
   const [fastOnly, setFastOnly] = useState(false)
   const [offersOnly, setOffersOnly] = useState(false)
+
+  /** Bestseller card par restaurant ka naam dikhane ke liye id → restaurant map. */
+  const restaurantById = useMemo(
+    () => new Map(restaurants.map((restaurant) => [restaurant.id, restaurant])),
+    [restaurants],
+  )
 
   const visible = useMemo(() => {
     let list = [...restaurants]
@@ -103,6 +114,55 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {bestsellers.length > 0 ? (
+          <section className="bestsellers" aria-labelledby="bestsellers-heading">
+            <div className="bestsellers__head">
+              <div>
+                <h2 id="bestsellers-heading">🔥 Most Sold Items</h2>
+                <p>Sabse popular dishes — seedha top restaurants se</p>
+              </div>
+            </div>
+
+            <div className="bestsellers__track">
+              {bestsellers.map((item) => {
+                const restaurant = restaurantById.get(item.restaurantId)
+                const sold = Number(item.soldCount || 0)
+
+                return (
+                  <Link
+                    key={`${item.restaurantId}-${item.id}`}
+                    to={`/restaurant/${item.restaurantId}`}
+                    className="bestseller-card"
+                  >
+                    <div className="bestseller-card__media">
+                      <SmartImage
+                        className="bestseller-card__image"
+                        src={item.imageUrl}
+                        alt={item.name}
+                        emoji="🍽️"
+                      />
+                      <span className="bestseller-card__badge">
+                        {sold > 0 ? `🔥 ${formatSoldCount(sold)} sold` : '⭐ Bestseller'}
+                      </span>
+                    </div>
+
+                    <div className="bestseller-card__body">
+                      <div className="bestseller-card__name-row">
+                        <VegBadge isVeg={Boolean(item.isVeg)} />
+                        <h3>{item.name}</h3>
+                      </div>
+                      <p className="bestseller-card__restaurant">
+                        {restaurant?.name || 'Restaurant'}
+                      </p>
+                      <p className="bestseller-card__price">{formatPrice(item.price)}</p>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </section>
+        ) : null}
 
         <div className="filter-row">
           <div className="filter-row__group">
