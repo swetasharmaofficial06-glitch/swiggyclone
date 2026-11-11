@@ -1,0 +1,420 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Foodie Hub home" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]: foodie
+        - generic [ref=e7]: hub
+      - button "OTHER Bengaluru, Karnataka ▾" [ref=e8] [cursor=pointer]:
+        - generic [ref=e9]: OTHER
+        - generic [ref=e10]: Bengaluru, Karnataka ▾
+      - navigation "Main navigation" [ref=e11]:
+        - link "Restaurants" [ref=e12] [cursor=pointer]:
+          - /url: /
+        - link "Admin" [ref=e13] [cursor=pointer]:
+          - /url: /admin
+        - button "Switch to dark mode" [active] [ref=e14] [cursor=pointer]:
+          - generic [aria-hidden] [ref=e15]: 🌙
+        - button "Cart, 0 items" [ref=e16] [cursor=pointer]:
+          - generic [aria-hidden] [ref=e17]: 🛒
+          - generic [ref=e18]: Cart
+        - button "Sign in" [ref=e19] [cursor=pointer]
+  - generic [ref=e27]:
+    - paragraph [ref=e28]: 🍔 Welcome to
+    - heading "Foodie Hub" [level=1] [ref=e29]
+    - paragraph [ref=e30]: Order food & groceries from your favourite restaurants — delivered fast, right at your doorstep.
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - generic [aria-hidden] [ref=e33]: 🔍
+        - searchbox "Search restaurants" [ref=e34]
+      - group "Filter by cuisine" [ref=e35]:
+        - button "All" [pressed] [ref=e36] [cursor=pointer]
+        - button "Biryani" [ref=e37] [cursor=pointer]
+        - button "North Indian" [ref=e38] [cursor=pointer]
+        - button "South Indian" [ref=e39] [cursor=pointer]
+        - button "Chinese" [ref=e40] [cursor=pointer]
+        - button "Pizza" [ref=e41] [cursor=pointer]
+        - button "Burger" [ref=e42] [cursor=pointer]
+        - button "Pasta" [ref=e43] [cursor=pointer]
+        - button "Momos" [ref=e44] [cursor=pointer]
+        - button "Kebab" [ref=e45] [cursor=pointer]
+        - button "Seafood" [ref=e46] [cursor=pointer]
+        - button "Salads" [ref=e47] [cursor=pointer]
+        - button "Breakfast" [ref=e48] [cursor=pointer]
+        - button "Snacks" [ref=e49] [cursor=pointer]
+        - button "Desserts" [ref=e50] [cursor=pointer]
+        - button "Ice Cream" [ref=e51] [cursor=pointer]
+  - main [ref=e52]:
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: 🏷️
+        - generic [ref=e56]:
+          - strong [ref=e57]: 50% OFF
+          - paragraph [ref=e58]: On your first order
+      - generic [ref=e59]:
+        - generic [ref=e60]: 🚴
+        - generic [ref=e61]:
+          - strong [ref=e62]: FREE delivery
+          - paragraph [ref=e63]: On orders above ₹499
+      - generic [ref=e64]:
+        - generic [ref=e65]: ⚡
+        - generic [ref=e66]:
+          - strong [ref=e67]: 30 min delivery
+          - paragraph [ref=e68]: From top-rated places
+    - region "🔥 Most Sold Items" [ref=e69]:
+      - generic [ref=e71]:
+        - heading "🔥 Most Sold Items" [level=2] [ref=e72]
+        - paragraph [ref=e73]: Sabse popular dishes — seedha top restaurants se
+      - generic [ref=e74]:
+        - link "Butter Naan 🔥 2.5k sold ● Butter Naan Thali Junction ₹49" [ref=e75] [cursor=pointer]:
+          - /url: /restaurant/9emDAXRszonqF0KovBPN
+          - generic [ref=e76]:
+            - img "Butter Naan" [ref=e77]
+            - generic [ref=e78]: 🔥 2.5k sold
+          - generic [ref=e79]:
+            - generic [ref=e80]:
+              - generic "Veg" [ref=e81]: ●
+              - heading "Butter Naan" [level=3] [ref=e82]
+            - paragraph [ref=e83]: Thali Junction
+            - paragraph [ref=e84]: ₹49
+        - link "Chicken Steam Momos 🔥 1.3k sold ● Chicken Steam Momos Momo Mia ₹159" [ref=e85] [cursor=pointer]:
+          - /url: /restaurant/04g8TM8VpPku39SVwQ0a
+          - generic [ref=e86]:
+            - img "Chicken Steam Momos" [ref=e87]
+            - generic [ref=e88]: 🔥 1.3k sold
+          - generic [ref=e89]:
+            - generic [ref=e90]:
+              - generic "Non-veg" [ref=e91]: ●
+              - heading "Chicken Steam Momos" [level=3] [ref=e92]
+            - paragraph [ref=e93]: Momo Mia
+            - paragraph [ref=e94]: ₹159
+        - link "Pav Bhaji 🔥 860 sold ● Pav Bhaji Chai & Snacks ₹149" [ref=e95] [cursor=pointer]:
+          - /url: /restaurant/8HV6uXcuNahRIOsHKFdn
+          - generic [ref=e96]:
+            - img "Pav Bhaji" [ref=e97]
+            - generic [ref=e98]: 🔥 860 sold
+          - generic [ref=e99]:
+            - generic [ref=e100]:
+              - generic "Veg" [ref=e101]: ●
+              - heading "Pav Bhaji" [level=3] [ref=e102]
+            - paragraph [ref=e103]: Chai & Snacks
+            - paragraph [ref=e104]: ₹149
+        - link "Paneer Butter Masala ⭐ Bestseller ● Paneer Butter Masala Thali Junction ₹289" [ref=e105] [cursor=pointer]:
+          - /url: /restaurant/9emDAXRszonqF0KovBPN
+          - generic [ref=e106]:
+            - img "Paneer Butter Masala" [ref=e107]
+            - generic [ref=e108]: ⭐ Bestseller
+          - generic [ref=e109]:
+            - generic [ref=e110]:
+              - generic "Veg" [ref=e111]: ●
+              - heading "Paneer Butter Masala" [level=3] [ref=e112]
+            - paragraph [ref=e113]: Thali Junction
+            - paragraph [ref=e114]: ₹289
+    - generic [ref=e115]:
+      - generic [ref=e116]:
+        - button "🌱 Pure Veg" [ref=e117] [cursor=pointer]
+        - button "★ Rated 4.0+" [ref=e118] [cursor=pointer]
+        - button "⚡ Fast Delivery" [ref=e119] [cursor=pointer]
+        - button "🏷️ Great Offers" [ref=e120] [cursor=pointer]
+      - generic [ref=e121]:
+        - generic [ref=e122]: 16 restaurants
+        - combobox "Sort restaurants" [ref=e123] [cursor=pointer]:
+          - option "Relevance" [selected]
+          - 'option "Rating: High to Low"'
+          - option "Delivery Time"
+          - 'option "Cost: Low to High"'
+          - 'option "Cost: High to Low"'
+    - generic [ref=e124]:
+      - link "Momo Mia OFFER ₹75 OFF above ₹249 ⚡ Fast delivery Momo Mia ★ 4.3 Momos, Tibetan ⏱ 25-35 min • ₹350 for two 📍 Koramangala, Bengaluru" [ref=e125] [cursor=pointer]:
+        - /url: /restaurant/04g8TM8VpPku39SVwQ0a
+        - generic [ref=e126]:
+          - img "Momo Mia" [ref=e127]
+          - generic [ref=e128]:
+            - generic [ref=e129]: OFFER
+            - generic [ref=e130]: ₹75 OFF above ₹249
+          - generic [ref=e131]: ⚡ Fast delivery
+        - generic [ref=e132]:
+          - generic [ref=e133]:
+            - heading "Momo Mia" [level=3] [ref=e134]
+            - generic [ref=e135]: ★ 4.3
+          - paragraph [ref=e136]: Momos, Tibetan
+          - generic [ref=e137]:
+            - generic [ref=e138]: ⏱ 25-35 min
+            - generic [ref=e139]: •
+            - generic [ref=e140]: ₹350 for two
+          - paragraph [ref=e141]: 📍 Koramangala, Bengaluru
+      - link "Chai & Snacks OFFER ₹40 OFF above ₹149 ⚡ Fast delivery Chai & Snacks ★ 4.3 Snacks, Street Food ⏱ 15-25 min • ₹200 for two 📍 BTM Layout, Bengaluru 🌱 Pure Veg" [ref=e142] [cursor=pointer]:
+        - /url: /restaurant/8HV6uXcuNahRIOsHKFdn
+        - generic [ref=e143]:
+          - img "Chai & Snacks" [ref=e144]
+          - generic [ref=e145]:
+            - generic [ref=e146]: OFFER
+            - generic [ref=e147]: ₹40 OFF above ₹149
+          - generic [ref=e148]: ⚡ Fast delivery
+        - generic [ref=e149]:
+          - generic [ref=e150]:
+            - heading "Chai & Snacks" [level=3] [ref=e151]
+            - generic [ref=e152]: ★ 4.3
+          - paragraph [ref=e153]: Snacks, Street Food
+          - generic [ref=e154]:
+            - generic [ref=e155]: ⏱ 15-25 min
+            - generic [ref=e156]: •
+            - generic [ref=e157]: ₹200 for two
+          - paragraph [ref=e158]: 📍 BTM Layout, Bengaluru
+          - generic [ref=e159]: 🌱 Pure Veg
+      - link "Thali Junction OFFER 50% OFF up to ₹100 ⚡ Fast delivery Thali Junction ★ 4.4 North Indian, Thali ⏱ 25-35 min • ₹350 for two 📍 Whitefield, Bengaluru" [ref=e160] [cursor=pointer]:
+        - /url: /restaurant/9emDAXRszonqF0KovBPN
+        - generic [ref=e161]:
+          - img "Thali Junction" [ref=e162]
+          - generic [ref=e163]:
+            - generic [ref=e164]: OFFER
+            - generic [ref=e165]: 50% OFF up to ₹100
+          - generic [ref=e166]: ⚡ Fast delivery
+        - generic [ref=e167]:
+          - generic [ref=e168]:
+            - heading "Thali Junction" [level=3] [ref=e169]
+            - generic [ref=e170]: ★ 4.4
+          - paragraph [ref=e171]: North Indian, Thali
+          - generic [ref=e172]:
+            - generic [ref=e173]: ⏱ 25-35 min
+            - generic [ref=e174]: •
+            - generic [ref=e175]: ₹350 for two
+          - paragraph [ref=e176]: 📍 Whitefield, Bengaluru
+      - link "Coastal Catch OFFER ₹150 OFF above ₹599 Coastal Catch ★ 4.5 Seafood, Coastal ⏱ 35-45 min • ₹700 for two 📍 Mangalore Road, Bengaluru" [ref=e177] [cursor=pointer]:
+        - /url: /restaurant/FRKy1rvC7d53iZwSXp7W
+        - generic [ref=e178]:
+          - img "Coastal Catch" [ref=e179]
+          - generic [ref=e180]:
+            - generic [ref=e181]: OFFER
+            - generic [ref=e182]: ₹150 OFF above ₹599
+        - generic [ref=e183]:
+          - generic [ref=e184]:
+            - heading "Coastal Catch" [level=3] [ref=e185]
+            - generic [ref=e186]: ★ 4.5
+          - paragraph [ref=e187]: Seafood, Coastal
+          - generic [ref=e188]:
+            - generic [ref=e189]: ⏱ 35-45 min
+            - generic [ref=e190]: •
+            - generic [ref=e191]: ₹700 for two
+          - paragraph [ref=e192]: 📍 Mangalore Road, Bengaluru
+      - link "Dosa Corner OFFER 20% OFF up to ₹75 ⚡ Fast delivery Dosa Corner ★ 4.6 South Indian ⏱ 15-25 min • ₹250 for two 📍 Jayanagar, Bengaluru 🌱 Pure Veg" [ref=e193] [cursor=pointer]:
+        - /url: /restaurant/LWxbwW5r4HtJJT5mploO
+        - generic [ref=e194]:
+          - img "Dosa Corner" [ref=e195]
+          - generic [ref=e196]:
+            - generic [ref=e197]: OFFER
+            - generic [ref=e198]: 20% OFF up to ₹75
+          - generic [ref=e199]: ⚡ Fast delivery
+        - generic [ref=e200]:
+          - generic [ref=e201]:
+            - heading "Dosa Corner" [level=3] [ref=e202]
+            - generic [ref=e203]: ★ 4.6
+          - paragraph [ref=e204]: South Indian
+          - generic [ref=e205]:
+            - generic [ref=e206]: ⏱ 15-25 min
+            - generic [ref=e207]: •
+            - generic [ref=e208]: ₹250 for two
+          - paragraph [ref=e209]: 📍 Jayanagar, Bengaluru
+          - generic [ref=e210]: 🌱 Pure Veg
+      - link "Pasta La Vista OFFER Buy 1 Get 1 on pasta ⚡ Fast delivery Pasta La Vista ★ 4.2 Pasta, Italian ⏱ 25-35 min • ₹650 for two 📍 Indiranagar, Bengaluru" [ref=e211] [cursor=pointer]:
+        - /url: /restaurant/Oyn6OwyBGb72U2vi2E16
+        - generic [ref=e212]:
+          - img "Pasta La Vista" [ref=e213]
+          - generic [ref=e214]:
+            - generic [ref=e215]: OFFER
+            - generic [ref=e216]: Buy 1 Get 1 on pasta
+          - generic [ref=e217]: ⚡ Fast delivery
+        - generic [ref=e218]:
+          - generic [ref=e219]:
+            - heading "Pasta La Vista" [level=3] [ref=e220]
+            - generic [ref=e221]: ★ 4.2
+          - paragraph [ref=e222]: Pasta, Italian
+          - generic [ref=e223]:
+            - generic [ref=e224]: ⏱ 25-35 min
+            - generic [ref=e225]: •
+            - generic [ref=e226]: ₹650 for two
+          - paragraph [ref=e227]: 📍 Indiranagar, Bengaluru
+      - link "Dragon Wok OFFER ₹100 OFF above ₹499 ⚡ Fast delivery Dragon Wok ★ 4.1 Chinese, Asian ⏱ 30-40 min • ₹500 for two 📍 Marathahalli, Bengaluru" [ref=e228] [cursor=pointer]:
+        - /url: /restaurant/P5TBojPEegYOG3pbTM2C
+        - generic [ref=e229]:
+          - img "Dragon Wok" [ref=e230]
+          - generic [ref=e231]:
+            - generic [ref=e232]: OFFER
+            - generic [ref=e233]: ₹100 OFF above ₹499
+          - generic [ref=e234]: ⚡ Fast delivery
+        - generic [ref=e235]:
+          - generic [ref=e236]:
+            - heading "Dragon Wok" [level=3] [ref=e237]
+            - generic [ref=e238]: ★ 4.1
+          - paragraph [ref=e239]: Chinese, Asian
+          - generic [ref=e240]:
+            - generic [ref=e241]: ⏱ 30-40 min
+            - generic [ref=e242]: •
+            - generic [ref=e243]: ₹500 for two
+          - paragraph [ref=e244]: 📍 Marathahalli, Bengaluru
+      - link "Kebab Nawab OFFER Flat ₹100 OFF above ₹499 ⚡ Fast delivery Kebab Nawab ★ 4.4 Kebab, Mughlai ⏱ 30-40 min • ₹500 for two 📍 Frazer Town, Bengaluru" [ref=e245] [cursor=pointer]:
+        - /url: /restaurant/QaAYZE8x2ow6GiIFLZM7
+        - generic [ref=e246]:
+          - img "Kebab Nawab" [ref=e247]
+          - generic [ref=e248]:
+            - generic [ref=e249]: OFFER
+            - generic [ref=e250]: Flat ₹100 OFF above ₹499
+          - generic [ref=e251]: ⚡ Fast delivery
+        - generic [ref=e252]:
+          - generic [ref=e253]:
+            - heading "Kebab Nawab" [level=3] [ref=e254]
+            - generic [ref=e255]: ★ 4.4
+          - paragraph [ref=e256]: Kebab, Mughlai
+          - generic [ref=e257]:
+            - generic [ref=e258]: ⏱ 30-40 min
+            - generic [ref=e259]: •
+            - generic [ref=e260]: ₹500 for two
+          - paragraph [ref=e261]: 📍 Frazer Town, Bengaluru
+      - link "Morning Plate OFFER Flat ₹50 OFF above ₹249 ⚡ Fast delivery Morning Plate ★ 4.1 Breakfast, Continental ⏱ 20-30 min • ₹350 for two 📍 Jayanagar, Bengaluru" [ref=e262] [cursor=pointer]:
+        - /url: /restaurant/ZXFuc1GxEjh6q4bg2Axp
+        - generic [ref=e263]:
+          - img "Morning Plate" [ref=e264]
+          - generic [ref=e265]:
+            - generic [ref=e266]: OFFER
+            - generic [ref=e267]: Flat ₹50 OFF above ₹249
+          - generic [ref=e268]: ⚡ Fast delivery
+        - generic [ref=e269]:
+          - generic [ref=e270]:
+            - heading "Morning Plate" [level=3] [ref=e271]
+            - generic [ref=e272]: ★ 4.1
+          - paragraph [ref=e273]: Breakfast, Continental
+          - generic [ref=e274]:
+            - generic [ref=e275]: ⏱ 20-30 min
+            - generic [ref=e276]: •
+            - generic [ref=e277]: ₹350 for two
+          - paragraph [ref=e278]: 📍 Jayanagar, Bengaluru
+      - link "Roll Adda OFFER ₹60 OFF above ₹249 ⚡ Fast delivery Roll Adda ★ 4.0 Rolls, Street Food ⏱ 20-30 min • ₹280 for two 📍 BTM Layout, Bengaluru" [ref=e279] [cursor=pointer]:
+        - /url: /restaurant/cNsasbrcpudl3huRpJ5L
+        - generic [ref=e280]:
+          - img "Roll Adda" [ref=e281]
+          - generic [ref=e282]:
+            - generic [ref=e283]: OFFER
+            - generic [ref=e284]: ₹60 OFF above ₹249
+          - generic [ref=e285]: ⚡ Fast delivery
+        - generic [ref=e286]:
+          - generic [ref=e287]:
+            - heading "Roll Adda" [level=3] [ref=e288]
+            - generic [ref=e289]: ★ 4.0
+          - paragraph [ref=e290]: Rolls, Street Food
+          - generic [ref=e291]:
+            - generic [ref=e292]: ⏱ 20-30 min
+            - generic [ref=e293]: •
+            - generic [ref=e294]: ₹280 for two
+          - paragraph [ref=e295]: 📍 BTM Layout, Bengaluru
+      - link "Sweet Tooth Bakery OFFER Flat ₹75 OFF above ₹349 ⚡ Fast delivery Sweet Tooth Bakery ★ 4.7 Desserts, Bakery ⏱ 20-30 min • ₹300 for two 📍 Church Street, Bengaluru 🌱 Pure Veg" [ref=e296] [cursor=pointer]:
+        - /url: /restaurant/ikF92TsCUsjV4Ber1S9Q
+        - generic [ref=e297]:
+          - img "Sweet Tooth Bakery" [ref=e298]
+          - generic [ref=e299]:
+            - generic [ref=e300]: OFFER
+            - generic [ref=e301]: Flat ₹75 OFF above ₹349
+          - generic [ref=e302]: ⚡ Fast delivery
+        - generic [ref=e303]:
+          - generic [ref=e304]:
+            - heading "Sweet Tooth Bakery" [level=3] [ref=e305]
+            - generic [ref=e306]: ★ 4.7
+          - paragraph [ref=e307]: Desserts, Bakery
+          - generic [ref=e308]:
+            - generic [ref=e309]: ⏱ 20-30 min
+            - generic [ref=e310]: •
+            - generic [ref=e311]: ₹300 for two
+          - paragraph [ref=e312]: 📍 Church Street, Bengaluru
+          - generic [ref=e313]: 🌱 Pure Veg
+      - link "Burger Bae OFFER Free delivery on orders above ₹199 ⚡ Fast delivery Burger Bae ★ 4.2 Burger, Fast Food ⏱ 20-30 min • ₹400 for two 📍 HSR Layout, Bengaluru" [ref=e314] [cursor=pointer]:
+        - /url: /restaurant/isw2uNmhOXRNSXPdALom
+        - generic [ref=e315]:
+          - img "Burger Bae" [ref=e316]
+          - generic [ref=e317]:
+            - generic [ref=e318]: OFFER
+            - generic [ref=e319]: Free delivery on orders above ₹199
+          - generic [ref=e320]: ⚡ Fast delivery
+        - generic [ref=e321]:
+          - generic [ref=e322]:
+            - heading "Burger Bae" [level=3] [ref=e323]
+            - generic [ref=e324]: ★ 4.2
+          - paragraph [ref=e325]: Burger, Fast Food
+          - generic [ref=e326]:
+            - generic [ref=e327]: ⏱ 20-30 min
+            - generic [ref=e328]: •
+            - generic [ref=e329]: ₹400 for two
+          - paragraph [ref=e330]: 📍 HSR Layout, Bengaluru
+      - link "Green Bowl OFFER FREE delivery on orders above ₹299 ⚡ Fast delivery Green Bowl ★ 4.3 Healthy, Salads ⏱ 20-30 min • ₹400 for two 📍 HSR Layout, Bengaluru 🌱 Pure Veg" [ref=e331] [cursor=pointer]:
+        - /url: /restaurant/jEsEA2ZVYfnAOagewsTm
+        - generic [ref=e332]:
+          - img "Green Bowl" [ref=e333]
+          - generic [ref=e334]:
+            - generic [ref=e335]: OFFER
+            - generic [ref=e336]: FREE delivery on orders above ₹299
+          - generic [ref=e337]: ⚡ Fast delivery
+        - generic [ref=e338]:
+          - generic [ref=e339]:
+            - heading "Green Bowl" [level=3] [ref=e340]
+            - generic [ref=e341]: ★ 4.3
+          - paragraph [ref=e342]: Healthy, Salads
+          - generic [ref=e343]:
+            - generic [ref=e344]: ⏱ 20-30 min
+            - generic [ref=e345]: •
+            - generic [ref=e346]: ₹400 for two
+          - paragraph [ref=e347]: 📍 HSR Layout, Bengaluru
+          - generic [ref=e348]: 🌱 Pure Veg
+      - link "Scoop Dreams OFFER 20% OFF up to ₹80 ⚡ Fast delivery Scoop Dreams ★ 4.6 Desserts, Ice Cream ⏱ 20-30 min • ₹250 for two 📍 Church Street, Bengaluru 🌱 Pure Veg" [ref=e349] [cursor=pointer]:
+        - /url: /restaurant/kgdwx7MVYAgq8URo0QfP
+        - generic [ref=e350]:
+          - img "Scoop Dreams" [ref=e351]
+          - generic [ref=e352]:
+            - generic [ref=e353]: OFFER
+            - generic [ref=e354]: 20% OFF up to ₹80
+          - generic [ref=e355]: ⚡ Fast delivery
+        - generic [ref=e356]:
+          - generic [ref=e357]:
+            - heading "Scoop Dreams" [level=3] [ref=e358]
+            - generic [ref=e359]: ★ 4.6
+          - paragraph [ref=e360]: Desserts, Ice Cream
+          - generic [ref=e361]:
+            - generic [ref=e362]: ⏱ 20-30 min
+            - generic [ref=e363]: •
+            - generic [ref=e364]: ₹250 for two
+          - paragraph [ref=e365]: 📍 Church Street, Bengaluru
+          - generic [ref=e366]: 🌱 Pure Veg
+      - link "Biryani Bhavan OFFER ₹125 OFF above ₹299 ⚡ Fast delivery Biryani Bhavan ★ 4.5 Biryani, North Indian ⏱ 30-40 min • ₹450 for two 📍 Indiranagar, Bengaluru" [ref=e367] [cursor=pointer]:
+        - /url: /restaurant/pEgqA20bE8YMYWyEAIo2
+        - generic [ref=e368]:
+          - img "Biryani Bhavan" [ref=e369]
+          - generic [ref=e370]:
+            - generic [ref=e371]: OFFER
+            - generic [ref=e372]: ₹125 OFF above ₹299
+          - generic [ref=e373]: ⚡ Fast delivery
+        - generic [ref=e374]:
+          - generic [ref=e375]:
+            - heading "Biryani Bhavan" [level=3] [ref=e376]
+            - generic [ref=e377]: ★ 4.5
+          - paragraph [ref=e378]: Biryani, North Indian
+          - generic [ref=e379]:
+            - generic [ref=e380]: ⏱ 30-40 min
+            - generic [ref=e381]: •
+            - generic [ref=e382]: ₹450 for two
+          - paragraph [ref=e383]: 📍 Indiranagar, Bengaluru
+      - link "Napoli Pizza Co. OFFER Buy 1 Get 1 on medium pizzas ⚡ Fast delivery Napoli Pizza Co. ★ 4.3 Pizza, Italian ⏱ 25-35 min • ₹600 for two 📍 Koramangala, Bengaluru" [ref=e384] [cursor=pointer]:
+        - /url: /restaurant/xO4lIOQhAtazIolsGEYB
+        - generic [ref=e385]:
+          - img "Napoli Pizza Co." [ref=e386]
+          - generic [ref=e387]:
+            - generic [ref=e388]: OFFER
+            - generic [ref=e389]: Buy 1 Get 1 on medium pizzas
+          - generic [ref=e390]: ⚡ Fast delivery
+        - generic [ref=e391]:
+          - generic [ref=e392]:
+            - heading "Napoli Pizza Co." [level=3] [ref=e393]
+            - generic [ref=e394]: ★ 4.3
+          - paragraph [ref=e395]: Pizza, Italian
+          - generic [ref=e396]:
+            - generic [ref=e397]: ⏱ 25-35 min
+            - generic [ref=e398]: •
+            - generic [ref=e399]: ₹600 for two
+          - paragraph [ref=e400]: 📍 Koramangala, Bengaluru
+  - contentinfo [ref=e401]: Built with React + Firebase · Swiggy-style clone (educational project) 🍔
