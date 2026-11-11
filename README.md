@@ -18,6 +18,8 @@ Stack: **React 19 + Vite + React Router + Firebase (Auth + Firestore + Hosting)*
   prefilled + email; Swiggy-style bill breakdown (Item Total + Delivery Fee + Platform Fee +
   GST), order Firestore `orders` mein `userId` ke saath save
 - 📦 **My Orders** (`/orders`) — account menu se khulta hai, realtime order list with status
+- 🌗 **Light/dark toggle** — navbar ke ☀️/🌙 button se theme switch, choice `localStorage` mein
+  yaad rehti hai (pehla paint bhi flash-free)
 - 🛡️ **Admin lock** — `/admin` email/password (ya Google) login + `admin: true` custom claim;
   panel mein password change ka option bhi hai
 - 🚴 **Free delivery nudge** — ₹499 se upar delivery free

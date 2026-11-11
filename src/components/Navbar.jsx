@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import useCart from '../hooks/useCart'
+import useTheme from '../hooks/useTheme'
 import useUI from '../hooks/useUI'
 import { cx } from '../utils/format'
 import GoogleIcon from './GoogleIcon'
@@ -10,6 +11,7 @@ import UserAvatar from './UserAvatar'
 export default function Navbar() {
   const cart = useCart()
   const { openCart } = useUI()
+  const { isDark, toggleTheme } = useTheme()
   const { user, initializing, signingIn, error, signIn, signOut, clearError } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
@@ -58,6 +60,18 @@ export default function Navbar() {
           <NavLink to="/admin" className={navLinkClass}>
             Admin
           </NavLink>
+
+          <button
+            type="button"
+            className="navbar__theme"
+            onClick={toggleTheme}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={isDark ? 'Light mode' : 'Dark mode'}
+            aria-pressed={isDark}
+          >
+            <span aria-hidden="true">{isDark ? '☀️' : '🌙'}</span>
+          </button>
+
           <button
             type="button"
             className={cx('navbar__cart', cart.count > 0 && 'navbar__cart--active')}

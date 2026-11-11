@@ -9,6 +9,17 @@
       content="Foodie Hub — order food & groceries from your favourite restaurants. Browse, cart banao aur order karo."
     />
     <meta name="theme-color" content="#fc8019" />
+    <script>
+      // Theme ko pehle paint se pehle lagao — warna light/dark flash hoga.
+      ;(function () {
+        try {
+          var stored = window.localStorage.getItem('foodiehub:theme')
+          document.documentElement.dataset.theme = stored === 'light' ? 'light' : 'dark'
+        } catch (error) {
+          document.documentElement.dataset.theme = 'dark'
+        }
+      })()
+    </script>
     <title>Foodie Hub | Order food from your favourite restaurants</title>
   </head>
   <body>
