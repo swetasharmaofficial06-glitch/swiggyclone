@@ -19,6 +19,14 @@ service cloud.firestore {
       }
     }
 
+    // Home page ka "Most Sold Items" section `collectionGroup('menu')` use karta hai.
+    // Collection group queries ke liye alag (path-agnostic) rule chahiye —
+    // neeche wala nested rule sirf normal reads par lagta hai.
+    match /{path=**}/menu/{menuItemId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Orders:
     //  - create: sirf signed-in user, apne uid ke liye
     //  - read: apne orders, ya admin ko saare
@@ -38,7 +46,31 @@ service cloud.firestore {
       allow read: if isAdmin()
                   || (request.auth != null && resource.data.userId == request.auth.uid);
 
-      allow update, delete: if false;
+      // Admin order status badal sakta hai (sirf status + timeline history).
+      allow update: if isAdmin()
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'statusHistory'])
+                    && request.resource.data.status in [
+                         'placed', 'accepted', 'outForDelivery', 'delivered', 'cancelled'
+                       ];
+      allow delete: if false;
+    }
+
+    // Saved addresses — sirf owner apne addresses padh/likh sakta hai.
+    match /users/{userId}/addresses/{addressId} {
+      function isOwner() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      allow read, update, delete: if isOwner();
+
+      allow create: if isOwner()
+                    && request.resource.data.keys().hasAll(['label', 'address', 'phone', 'isDefault'])
+                    && request.resource.data.label is string
+                    && request.resource.data.label.size() > 0
+                    && request.resource.data.address is string
+                    && request.resource.data.address.size() >= 10
+                    && request.resource.data.phone is string
+                    && request.resource.data.isDefault is bool;
     }
 
     match /{document=**} {

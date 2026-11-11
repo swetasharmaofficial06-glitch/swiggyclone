@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import useCart from '../hooks/useCart'
-import { FEES } from '../constants'
-import { calculateBill, formatPrice } from '../utils/format'
+import useAddresses from '../hooks/useAddresses'
+import { ADDRESS_LABELS, COUPONS, FEES, MAX_ADDRESSES } from '../constants'
+import { calculateBill, cx, formatPrice } from '../utils/format'
+import { couponForCart, findCoupon } from '../utils/coupon'
 import GoogleIcon from './GoogleIcon'
 import SmartImage from './SmartImage'
 import UserAvatar from './UserAvatar'
@@ -15,11 +17,22 @@ export default function CartDrawer({ open, onClose }) {
   const cart = useCart()
   const navigate = useNavigate()
   const { user, initializing, signingIn, signIn } = useAuth()
+  const { addresses } = useAddresses(user?.uid, Boolean(user))
   const [view, setView] = useState('cart')
   const [customer, setCustomer] = useState(EMPTY_CUSTOMER)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
   const [order, setOrder] = useState(null)
+
+  // Coupons
+  const [couponCode, setCouponCode] = useState('')
+  const [appliedCoupon, setAppliedCoupon] = useState(null)
+  const [couponMessage, setCouponMessage] = useState(null)
+
+  // Saved addresses
+  const [selectedAddressId, setSelectedAddressId] = useState('')
+  const [saveAddress, setSaveAddress] = useState(false)
+  const [addressLabel, setAddressLabel] = useState('Home')
 
   /** Drawer khula ho toh background scroll lock. */
   useEffect(() => {
@@ -39,8 +52,21 @@ export default function CartDrawer({ open, onClose }) {
 
   if (!open) return null
 
-  const bill = calculateBill(cart.subtotal, FEES)
-  const freeDeliveryGap = FEES.freeDeliveryAbove - cart.subtotal
+  // Coupon ka asar bill par (min order se kam ho jaye to error, discount nahi).
+  const couponResult = appliedCoupon ? couponForCart(appliedCoupon, cart.subtotal) : null
+  const activeCoupon = couponResult && !couponResult.error ? appliedCoupon : null
+  const couponError = appliedCoupon && couponResult?.error ? couponResult.error : null
+
+  const bill = calculateBill(cart.subtotal, {
+    ...FEES,
+    discount: couponResult?.discount ?? 0,
+    freeDelivery: couponResult?.freeDelivery ?? false,
+  })
+
+  const freeDeliveryGap = activeCoupon?.type === 'freeDelivery' ? 0 : FEES.freeDeliveryAbove - cart.subtotal
+  const couponFeedback = couponError
+    ? { type: 'error', text: couponError }
+    : couponMessage
 
   function handleClose() {
     onClose()
@@ -49,11 +75,57 @@ export default function CartDrawer({ open, onClose }) {
       setView('cart')
       setOrder(null)
       setCustomer(EMPTY_CUSTOMER)
+      setCouponCode('')
+      setAppliedCoupon(null)
+      setCouponMessage(null)
+      setSelectedAddressId('')
+      setSaveAddress(false)
+      setAddressLabel('Home')
     }
   }
 
   function update(field, value) {
     setCustomer((prev) => ({ ...prev, [field]: value }))
+  }
+
+  /** Address/phone manually badla to saved-address selection clear. */
+  function updateDelivery(field, value) {
+    setSelectedAddressId('')
+    update(field, value)
+  }
+
+  function chooseSavedAddress(address) {
+    setSelectedAddressId(address.id)
+    setCustomer((prev) => ({ ...prev, address: address.address, phone: address.phone }))
+    setSaveAddress(false)
+  }
+
+  function handleApplyCoupon(rawCode) {
+    setError(null)
+    const value = typeof rawCode === 'string' ? rawCode : couponCode
+    const coupon = findCoupon(value)
+    if (!coupon) {
+      setAppliedCoupon(null)
+      setCouponMessage({ type: 'error', text: 'Ye coupon code valid nahi hai.' })
+      return
+    }
+
+    const result = couponForCart(coupon, cart.subtotal)
+    if (result.error) {
+      setAppliedCoupon(null)
+      setCouponMessage({ type: 'error', text: result.error })
+      return
+    }
+
+    setAppliedCoupon(coupon)
+    setCouponCode(coupon.code)
+    setCouponMessage({ type: 'success', text: `${coupon.code} applied — ${coupon.label}` })
+  }
+
+  function removeCoupon() {
+    setAppliedCoupon(null)
+    setCouponCode('')
+    setCouponMessage(null)
   }
 
   async function handleCheckout(event) {
@@ -90,9 +162,30 @@ export default function CartDrawer({ open, onClose }) {
       const orderId = await placeOrder({
         customer: { ...customer, phone },
         items: cart.items,
-        bill,
+        bill: { ...bill, couponCode: activeCoupon?.code ?? '' },
       })
-      setOrder({ id: orderId, total: bill.total })
+
+      // Best-effort: naya address save karo — fail ho to order na ruke.
+      if (saveAddress && !selectedAddressId && addresses.length < MAX_ADDRESSES) {
+        try {
+          const { addAddress } = await import('../services/addressService')
+          await addAddress(user.uid, {
+            label: addressLabel,
+            address: customer.address,
+            phone,
+            isDefault: addresses.length === 0,
+          })
+        } catch {
+          // ignore — order already place ho chuka hai
+        }
+      }
+
+      setOrder({
+        id: orderId,
+        total: bill.total,
+        discount: bill.discount,
+        couponCode: activeCoupon?.code ?? '',
+      })
       setView('success')
       cart.clearCart()
     } catch (err) {
@@ -127,6 +220,11 @@ export default function CartDrawer({ open, onClose }) {
             <p className="muted-text">Order ID</p>
             <code className="order-success__id">#{order?.id?.slice(0, 8).toUpperCase()}</code>
             <p className="muted-text">Paid amount: <strong>{formatPrice(order?.total)}</strong></p>
+            {order?.discount > 0 ? (
+              <p className="muted-text">
+                🎟️ {order.couponCode} · Saved <strong>{formatPrice(order.discount)}</strong>
+              </p>
+            ) : null}
             <p className="muted-text">
               Restaurant aapka order jaldi accept karega. (Demo app — real delivery nahi hogi.)
             </p>
@@ -205,6 +303,33 @@ export default function CartDrawer({ open, onClose }) {
                   placeholder="Pooja Sharma"
                 />
               </div>
+
+              {addresses.length > 0 ? (
+                <div className="form-field">
+                  <span className="form-label">Saved addresses</span>
+                  <div className="saved-addresses">
+                    {addresses.map((address) => (
+                      <button
+                        key={address.id}
+                        type="button"
+                        className={cx(
+                          'saved-address',
+                          selectedAddressId === address.id && 'saved-address--active',
+                        )}
+                        onClick={() => chooseSavedAddress(address)}
+                      >
+                        <strong>
+                          {address.label === 'Home' ? '🏠' : address.label === 'Work' ? '🏢' : '📍'}{' '}
+                          {address.label}
+                          {address.isDefault ? ' · Default' : ''}
+                        </strong>
+                        <span>{address.address}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
               <div className="form-field">
                 <label htmlFor="checkout-phone">Mobile number *</label>
                 <input
@@ -212,7 +337,7 @@ export default function CartDrawer({ open, onClose }) {
                   type="tel"
                   inputMode="numeric"
                   value={customer.phone}
-                  onChange={(event) => update('phone', event.target.value)}
+                  onChange={(event) => updateDelivery('phone', event.target.value)}
                   autoComplete="tel"
                   placeholder="9876543210"
                 />
@@ -223,11 +348,38 @@ export default function CartDrawer({ open, onClose }) {
                   id="checkout-address"
                   rows={3}
                   value={customer.address}
-                  onChange={(event) => update('address', event.target.value)}
+                  onChange={(event) => updateDelivery('address', event.target.value)}
                   autoComplete="street-address"
                   placeholder="Flat / house no., street, area, city"
                 />
               </div>
+
+              {!selectedAddressId && addresses.length < MAX_ADDRESSES ? (
+                <div className="save-address-box">
+                  <label className="form-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={saveAddress}
+                      onChange={(event) => setSaveAddress(event.target.checked)}
+                    />
+                    Ye address future ke liye save karo
+                  </label>
+                  {saveAddress ? (
+                    <div className="address-label-row">
+                      {ADDRESS_LABELS.map((label) => (
+                        <button
+                          key={label}
+                          type="button"
+                          className={cx('chip', addressLabel === label && 'chip--active')}
+                          onClick={() => setAddressLabel(label)}
+                        >
+                          {label === 'Home' ? '🏠' : label === 'Work' ? '🏢' : '📍'} {label}
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
               <div className="form-field">
                 <label htmlFor="checkout-payment">Payment mode</label>
                 <select
@@ -238,6 +390,55 @@ export default function CartDrawer({ open, onClose }) {
                   <option value="cod">Cash on Delivery</option>
                   <option value="upi">UPI (demo)</option>
                 </select>
+              </div>
+
+              <div className="coupon-box">
+                <label className="form-label" htmlFor="checkout-coupon">
+                  🎟️ Coupon code
+                </label>
+                <div className="coupon-box__row">
+                  <input
+                    id="checkout-coupon"
+                    value={couponCode}
+                    onChange={(event) => setCouponCode(event.target.value)}
+                    placeholder="WELCOME50 / FREEDEL / FLAT50"
+                    disabled={Boolean(appliedCoupon)}
+                  />
+                  {appliedCoupon ? (
+                    <button type="button" className="btn btn--ghost btn--small" onClick={removeCoupon}>
+                      Remove
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn btn--outline btn--small"
+                      onClick={() => handleApplyCoupon()}
+                    >
+                      Apply
+                    </button>
+                  )}
+                </div>
+
+                {!appliedCoupon ? (
+                  <div className="coupon-box__chips">
+                    {Object.values(COUPONS).map((coupon) => (
+                      <button
+                        key={coupon.code}
+                        type="button"
+                        className="coupon-chip"
+                        onClick={() => handleApplyCoupon(coupon.code)}
+                        title={`Min order ₹${coupon.minOrder}`}
+                      >
+                        <strong>{coupon.code}</strong>
+                        <span>{coupon.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+
+                {couponFeedback ? (
+                  <p className={`form-msg form-msg--${couponFeedback.type}`}>{couponFeedback.text}</p>
+                ) : null}
               </div>
 
               <div className="bill-card">
@@ -257,6 +458,12 @@ export default function CartDrawer({ open, onClose }) {
                   <span>GST (5%)</span>
                   <span>{formatPrice(bill.gst)}</span>
                 </div>
+                {bill.discount > 0 ? (
+                  <div className="bill-row bill-row--discount">
+                    <span>🎟️ Coupon ({activeCoupon?.code})</span>
+                    <span>− {formatPrice(bill.discount)}</span>
+                  </div>
+                ) : null}
                 <div className="bill-row bill-row--total">
                   <span>To Pay</span>
                   <strong>{formatPrice(bill.total)}</strong>
@@ -318,6 +525,12 @@ export default function CartDrawer({ open, onClose }) {
               </p>
             ) : null}
 
+            {activeCoupon ? (
+              <p className="coupon-applied-note">
+                🎟️ <strong>{activeCoupon.code}</strong> applied — {activeCoupon.label}
+              </p>
+            ) : null}
+
             <div className="bill-card">
               <div className="bill-row">
                 <span>Item Total</span>
@@ -335,6 +548,12 @@ export default function CartDrawer({ open, onClose }) {
                 <span>GST (5%)</span>
                 <span>{formatPrice(bill.gst)}</span>
               </div>
+              {bill.discount > 0 ? (
+                <div className="bill-row bill-row--discount">
+                  <span>🎟️ Coupon ({activeCoupon?.code})</span>
+                  <span>− {formatPrice(bill.discount)}</span>
+                </div>
+              ) : null}
               <div className="bill-row bill-row--total">
                 <span>To Pay</span>
                 <strong>{formatPrice(bill.total)}</strong>

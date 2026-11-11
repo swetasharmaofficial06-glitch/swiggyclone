@@ -119,6 +119,14 @@ export default function Navbar() {
                   >
                     📦 My orders
                   </Link>
+                  <Link
+                    to="/addresses"
+                    className="navbar__menu-item navbar__menu-item--link"
+                    role="menuitem"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    📍 Saved addresses
+                  </Link>
                   <button
                     type="button"
                     className="navbar__menu-item"

@@ -1,4 +1,15 @@
-import { addDoc, collection, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore'
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  serverTimestamp,
+  Timestamp,
+  updateDoc,
+  where,
+} from 'firebase/firestore'
 import { auth, db } from './firebase'
 
 export const ORDERS_COLLECTION = 'orders'
@@ -10,6 +21,15 @@ export const ORDER_STATUS = {
   delivered: { label: 'Delivered', emoji: '✅' },
   cancelled: { label: 'Cancelled', emoji: '❌' },
 }
+
+/** Customer ko dikhne wala normal flow (cancelled alag hai). */
+export const ORDER_FLOW = ['placed', 'accepted', 'outForDelivery', 'delivered']
+
+/** Admin dropdown ke options. */
+export const ORDER_STATUS_OPTIONS = Object.entries(ORDER_STATUS).map(([value, meta]) => ({
+  value,
+  ...meta,
+}))
 
 /**
  * Checkout order ko Firestore mein save karta hai.
@@ -41,9 +61,12 @@ export async function placeOrder({ customer, items, bill }) {
     deliveryFee: bill.deliveryFee,
     platformFee: bill.platformFee,
     gst: bill.gst,
+    discount: Number(bill.discount || 0),
+    couponCode: bill.couponCode || '',
     subtotal: bill.itemsTotal,
     total: bill.total,
     status: 'placed',
+    statusHistory: [{ status: 'placed', at: Timestamp.now() }],
     createdAt: serverTimestamp(),
   })
 
@@ -69,4 +92,30 @@ export function subscribeMyOrders(userId, onNext, onError) {
     },
     onError,
   )
+}
+
+/** Admin ke liye saare orders — newest first. */
+export function subscribeAllOrders(onNext, onError) {
+  return onSnapshot(
+    collection(db, ORDERS_COLLECTION),
+    (snapshot) => {
+      const orders = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+      orders.sort((a, b) => (b.createdAt?.toMillis?.() ?? 0) - (a.createdAt?.toMillis?.() ?? 0))
+      onNext(orders)
+    },
+    onError,
+  )
+}
+
+/**
+ * Admin-only: order ka status badlo + timeline ke liye history append karo.
+ * `firestore.rules` sirf admin ko ye update deta hai.
+ */
+export async function updateOrderStatus(orderId, status) {
+  if (!ORDER_STATUS[status]) throw new Error('Ye order status valid nahi hai.')
+
+  return updateDoc(doc(db, ORDERS_COLLECTION, orderId), {
+    status,
+    statusHistory: arrayUnion({ status, at: Timestamp.now() }),
+  })
 }

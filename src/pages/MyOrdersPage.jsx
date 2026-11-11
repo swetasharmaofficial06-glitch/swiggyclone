@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
-import { ORDER_STATUS, subscribeMyOrders } from '../services/orderService'
+import { ORDER_FLOW, ORDER_STATUS, subscribeMyOrders } from '../services/orderService'
 import { cx, formatPrice } from '../utils/format'
 import GoogleIcon from '../components/GoogleIcon'
 import Loader from '../components/Loader'
@@ -15,6 +15,11 @@ const dateFormatter = new Intl.DateTimeFormat('en-IN', {
   minute: '2-digit',
 })
 
+const timeFormatter = new Intl.DateTimeFormat('en-IN', {
+  hour: 'numeric',
+  minute: '2-digit',
+})
+
 function formatDate(timestamp) {
   if (!timestamp?.toDate) return 'Just now'
   try {
@@ -22,6 +27,59 @@ function formatDate(timestamp) {
   } catch {
     return 'Just now'
   }
+}
+
+function formatTime(timestamp) {
+  if (!timestamp?.toDate) return ''
+  try {
+    return timeFormatter.format(timestamp.toDate())
+  } catch {
+    return ''
+  }
+}
+
+/** Status ke hisaab se kaunsa step done/active/pending hai. */
+function OrderTimeline({ order }) {
+  if (order.status === 'cancelled') {
+    const cancelledAt = (order.statusHistory ?? []).find((entry) => entry.status === 'cancelled')?.at
+    return (
+      <div className="order-timeline order-timeline--cancelled">
+        <span className="order-timeline__cancel-emoji">❌</span>
+        <div>
+          <strong>Order cancelled</strong>
+          <p>{cancelledAt ? `Cancelled at ${formatTime(cancelledAt)}` : 'Ye order cancel ho gaya.'}</p>
+        </div>
+      </div>
+    )
+  }
+
+  const currentIndex = Math.max(ORDER_FLOW.indexOf(order.status), 0)
+  const history = new Map()
+  if (order.createdAt) history.set('placed', order.createdAt)
+  ;(order.statusHistory ?? []).forEach((entry) => {
+    if (entry?.status && entry?.at) history.set(entry.status, entry.at)
+  })
+
+  return (
+    <ol className="order-timeline" aria-label="Order progress">
+      {ORDER_FLOW.map((status, index) => {
+        const meta = ORDER_STATUS[status]
+        const state = index < currentIndex ? 'done' : index === currentIndex ? 'active' : 'pending'
+
+        return (
+          <li key={status} className={`order-timeline__step order-timeline__step--${state}`}>
+            <span className="order-timeline__dot" aria-hidden="true">
+              {state === 'done' ? '✓' : state === 'active' ? meta.emoji : '•'}
+            </span>
+            <span className="order-timeline__label">{meta.label}</span>
+            <span className="order-timeline__time">
+              {state !== 'pending' && history.get(status) ? formatTime(history.get(status)) : ''}
+            </span>
+          </li>
+        )
+      })}
+    </ol>
+  )
 }
 
 export default function MyOrdersPage() {
@@ -123,6 +181,8 @@ export default function MyOrdersPage() {
                   </span>
                 </div>
 
+                <OrderTimeline order={order} />
+
                 <ul className="order-card__items">
                   {items.map((item, index) => (
                     <li key={`${order.id}-${item.itemId ?? index}`}>
@@ -133,6 +193,12 @@ export default function MyOrdersPage() {
                     </li>
                   ))}
                 </ul>
+
+                {Number(order.discount || 0) > 0 ? (
+                  <p className="order-card__saving">
+                    🎟️ {order.couponCode || 'Coupon'} · Saved {formatPrice(order.discount)}
+                  </p>
+                ) : null}
 
                 <div className="order-card__foot">
                   <span>
