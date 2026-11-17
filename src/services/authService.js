@@ -1,16 +1,22 @@
 import {
   GoogleAuthProvider,
+  getRedirectResult,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   signOut,
   updatePassword,
 } from 'firebase/auth'
 import { auth } from './firebase'
+import { isNativePlatform } from '../utils/platform'
 
 /**
- * Firebase Auth wrapper — Google popup (customers) + email/password (admin panel).
+ * Firebase Auth wrapper — Google (customers) + email/password (admin panel).
  * Order place karne ke liye login zaroori hai (see `orderService.js` + `firestore.rules`).
+ *
+ * Native (Capacitor WebView) mein popup supported nahi hai — wahan redirect flow
+ * chalta hai; result page reload ke baad `onAuthStateChanged` se milta hai.
  */
 
 const googleProvider = new GoogleAuthProvider()
@@ -43,8 +49,15 @@ export function authErrorMessage(error) {
   return ERROR_MESSAGES[error?.code] ?? error?.message ?? 'Sign-in nahi hua. Dobara try karo.'
 }
 
-/** Google popup kholta hai. Cancel karne pe `null` return karta hai (error throw nahi). */
+/** Google sign-in. Native par redirect, web par popup.
+ *  Cancel karne pe `null` return karta hai (error throw nahi). */
 export async function signInWithGoogle() {
+  if (isNativePlatform()) {
+    // Redirect ke baad page reload hota hai — user `watchAuth` se set hota hai.
+    await signInWithRedirect(auth, googleProvider)
+    return null
+  }
+
   try {
     const result = await signInWithPopup(auth, googleProvider)
     return result.user
@@ -57,6 +70,13 @@ export async function signInWithGoogle() {
     }
     throw error
   }
+}
+
+/** Native redirect ke baad chalne wala result read — errors surface karne ke liye. */
+export async function completeGoogleRedirect() {
+  if (!isNativePlatform()) return null
+  const result = await getRedirectResult(auth)
+  return result?.user ?? null
 }
 
 /** Admin panel ka email/password sign-in. Galat credentials pe error throw karta hai. */

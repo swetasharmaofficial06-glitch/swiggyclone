@@ -5,8 +5,13 @@ import CartDrawer from './components/CartDrawer'
 import CartBar from './components/CartBar'
 import ScrollToTop from './components/ScrollToTop'
 import ErrorBoundary from './components/ErrorBoundary'
+import InstallPrompt from './components/InstallPrompt'
+import OfflineBanner from './components/OfflineBanner'
 import Loader from './components/Loader'
 import useUI from './hooks/useUI'
+
+/** Native bridge sirf native shell mein chahiye — web bundle se bahar rehta hai. */
+const NativeBridge = lazy(() => import('./components/NativeBridge'))
 
 /** Route-level code splitting — har page apna JS chunk. */
 const Home = lazy(() => import('./pages/Home'))
@@ -21,6 +26,10 @@ export default function App() {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <NativeBridge />
+      </Suspense>
+      <OfflineBanner />
       <ScrollToTop />
       <Navbar />
       <ErrorBoundary>
@@ -38,6 +47,8 @@ export default function App() {
 
       <CartBar />
       <CartDrawer open={isCartOpen} onClose={closeCart} />
+
+      <InstallPrompt />
 
       <footer className="site-footer">
         Built with React + Firebase · Swiggy-style clone (educational project) 🍔

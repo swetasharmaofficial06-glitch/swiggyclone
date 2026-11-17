@@ -53,3 +53,36 @@ Thumbs.db
 
 # ---- Playwright CLI session artifacts ----
 .playwright-cli/
+
+# ---- Capacitor / native app ----
+# android/ aur ios/ source hain — commit hote hain. Sirf build/signing artifacts ignore.
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/keystore.properties
+android/app/release/
+android/.idea/
+ios/App/build/
+ios/App/DerivedData/
+ios/App/Pods/
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/App.xcodeproj/xcuserdata/
+ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
+ios/App/App.xcworkspace/xcshareddata/swiftpm/configuration/
+*.xcarchive
+*.ipa
+*.jks
+*.p8
+build/ios/
+assets/.generated.json
+
+# Release keystore / store credentials (kabhi commit nahi)
+foodiehub-release.jks
+release.keystore
+play-service-account.json
+*-service-account.json
+
+# Capacitor Assets PWA output (hum apne PWA icons public/ se generate karte hain)
+icons/
+public/manifest.webmanifest

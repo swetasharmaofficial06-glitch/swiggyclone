@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import { isNativePlatform } from './utils/platform'
 
 const ENV_KEYS = [
   'VITE_FIREBASE_API_KEY',
@@ -35,6 +36,14 @@ function renderSetupScreen() {
       </div>
     </StrictMode>,
   )
+}
+
+/** PWA service worker — sirf production web par. Native shell mein register nahi hota
+ *  (warna WebView + SW ka double cache stale assets serve karta hai). */
+if (import.meta.env.PROD && !isNativePlatform()) {
+  import('virtual:pwa-register').then(({ registerSW }) => {
+    registerSW({ immediate: true })
+  })
 }
 
 if (missing.length > 0) {

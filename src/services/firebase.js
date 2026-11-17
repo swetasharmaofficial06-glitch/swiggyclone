@@ -1,6 +1,11 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import {
+  getFirestore,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from 'firebase/firestore'
 
 /**
  * Firebase initialization — config `.env` se aata hai, code mein hardcoded nahi.
@@ -39,4 +44,21 @@ export const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 
 export const auth = getAuth(app)
-export const db = getFirestore(app)
+
+/**
+ * Firestore offline persistence — network band hone par last-cached restaurants,
+ * menu, cart aur orders khulte hain (native app + PWA dono).
+ * IndexedDB block ho (private mode) to default in-memory cache par fall back.
+ */
+function createFirestore() {
+  try {
+    return initializeFirestore(app, {
+      localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+    })
+  } catch (error) {
+    console.warn('Firestore offline cache enable nahi hua — default cache use ho raha hai.', error)
+    return getFirestore(app)
+  }
+}
+
+export const db = createFirestore()

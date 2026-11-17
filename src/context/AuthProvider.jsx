@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AuthContext } from './authContext'
 import {
   authErrorMessage,
+  completeGoogleRedirect,
   signInWithEmail as firebaseSignInWithEmail,
   signInWithGoogle,
   signOutUser,
@@ -28,6 +29,24 @@ export function AuthProvider({ children }) {
     return () => {
       active = false
       unsubscribe()
+    }
+  }, [])
+
+  /**
+   * Native Google sign-in redirect se wapas aane par result padho.
+   * Web par ye no-op hai (popup flow use hota hai).
+   */
+  useEffect(() => {
+    let active = true
+    completeGoogleRedirect()
+      .then((redirectUser) => {
+        if (active && redirectUser) setUser(redirectUser)
+      })
+      .catch((err) => {
+        if (active) setError(authErrorMessage(err))
+      })
+    return () => {
+      active = false
     }
   }, [])
 
