@@ -122,6 +122,23 @@ npm run deploy          # build + hosting + Firestore rules
 > ℹ️ `swiggy-clone/.firebaserc` mein project `webufire` set hai.
 > Hosting site: `webufire.web.app` / `webufire.firebaseapp.com`.
 
+## 📱 App (PWA + Android/iOS)
+
+Wahi codebase ab **installable PWA** aur **native Android/iOS app** dono banata hai
+(Capacitor wrapper — koi UI rewrite nahi). Web deploy pehle jaisa hi hai:
+
+```bash
+npm run app:icons     # icons + splash generate
+npm run app:setup     # android/ + ios/ projects (ek baar)
+npm run app:sync      # build + version sync + cap sync
+npm run app:android   # signed AAB
+npm run app:ios       # .ipa / TestFlight
+```
+
+PWA install prompt, offline shell, back button aur deep links already wired hain.
+Poora release runbook + secrets + Play/App Store checklist: **`docs/APP_RELEASE.md`**.
+Requirements: **`rfp/requirements-website2app.md`**.
+
 ## 🔐 Google sign-in (order ke liye)
 
 Order place karne ke liye Google login zaroori hai. Signed-out user checkout kholta hai toh
